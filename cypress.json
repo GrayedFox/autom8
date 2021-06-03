@@ -1,0 +1,20 @@
+{
+  "baseUrl": "http://localhost:3000",
+  "integrationFolder": "cypress/tests",
+  
+  "experimentalInteractiveRunEvents": true,
+  
+  "retries": {
+    "runMode": 1,
+    "openMode": 1
+  },
+  
+  "env": {
+    "apiUrl": "http://localhost:3001",
+    "coverage": false,
+    
+    "codeCoverage": {
+      "url": "http://localhost:3001/__coverage__"
+    }
+  }
+}

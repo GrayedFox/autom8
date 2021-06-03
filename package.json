@@ -1,0 +1,35 @@
+{
+  "name": "autom8",
+  "version": "1.0.0",
+  "description": "A template repo for web and backend automation.",
+  "main": "index.js",
+  "dependencies": {
+    "chance": "^1.1.7"
+  },
+  "devDependencies": {
+    "cypress": "^7.4.0",
+    "eslint": "^7.28.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-plugin-chai-friendly": "^0.7.1",
+    "eslint-plugin-cypress": "^2.11.3",
+    "eslint-plugin-import": "^2.23.4"
+  },
+  "scripts": {
+    "test": "npx cypress open"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GrayedFox/autom8.git"
+  },
+  "keywords": [
+    "automation",
+    "testing",
+    "qa"
+  ],
+  "author": "Che Fisher",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/GrayedFox/autom8/issues"
+  },
+  "homepage": "https://github.com/GrayedFox/autom8#readme"
+}
