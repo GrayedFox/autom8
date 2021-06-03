@@ -1,0 +1,22 @@
+{
+  "plugins": [
+    "cypress"
+  ],
+  
+  "extends": [
+    "airbnb-base",
+    "plugin:cypress/recommended",
+    "plugin:chai-friendly/recommended"
+  ],
+  
+  "env": {
+    "cypress/globals": true
+  },
+  
+  "rules": {
+    "semi": 0,
+    "comma-dangle": 0,
+    "no-param-reassign": 0,
+    "class-methods-use-this": 0
+  }
+}
