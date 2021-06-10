@@ -35,12 +35,22 @@ few principles (best practises) test engineers should adhere to when building au
 While each product and stack will require it's own unique tests and logic, given the above
 principles and conservative assumptions about most modern web application stacks, this repo:
 
-- ships with a MongoDB test database that can be interacted with using `cy.task()`
-- writes fixtures that can be used within tests based on the data retrieved/seeded from the test
-  database
+- relies on a MongoDB docker image that can be interacted with using `cy.task()`
+- reads/writes fixtures based on the data retrieved/seeded from the MongoDB test database
 - ships with examples that employ the [PageObject pattern][1] for writing clean integration tests
 - ships with examples of [Cypress custom commands][2]
 - can be run against a local [Cypress Real World Application][0] app straight out of the box
+
+## install
+
+1. `git clone` clone the repository
+2. run `npm install`
+3. run `docker pull mongo`
+
+## prerequisites
+
+- you will need [Docker][8] in order to pull the MongoDB image which we rely on for testing
+- you will need [NodeJS][9] since we use Node and NPM to manage and install localised packages
 
 ## usage
 
@@ -48,15 +58,27 @@ principles and conservative assumptions about most modern web application stacks
 - update the `apiURL` inside `cypress.json` to point to your API
 - update and add any endpoints to `cypress.env.json` (your VCS may want to ignore this file)
 
+## troubleshooting
+
+Sometimes a test can hang or something can go wrong which prevents the teardown() method from
+being called in the `after:run` hook. If this happens you may need to manually stop and remove
+the mongo docker image by running this command inside your terminal:
+
+`docker stop mongo-on-docker && docker rm mongo-on-docker`
+
+If you have updated the image name inside `cypress.env.json` replace the image name above with
+whatever custom image name you have chosen.
+
 ## feature list
 
 - [X] Sample integration login test using PageObject pattern (works against Cypress RWA)
 - [X] Sample API test for directly testing an API (works against Cypress RWA)
 - [ ] Sample component test for testing a React component (works against Cypress RWA)
-- [X] ChanceJS used to randomised test data generation with repeatable seeds
-- [ ] MongoDB seed task run once per suite run
-- [ ] MongoDB teardown task run once per suite run
-- [ ] Fixture generation task run once per suite run
+- [X] ChanceJS used to randomised test data generation with identical seed used when retrying tests
+- [X] MongoDB setup method called once per run as part of `before:run` hook example
+- [X] MongoDB teardown method called once per run as part of `after:run` hook example
+- [X] Seed database task working, can be called from individual specs
+- [X] Fixture generation task working, can be called from individual specs
 
 ## further reading
 
@@ -73,3 +95,5 @@ principles and conservative assumptions about most modern web application stacks
 [5]: https://medium.com/free-code-camp/why-use-static-types-in-javascript-part-1-8382da1e0adb#.gqg3xut8w
 [6]: https://hackernoon.com/reproducible-random-tests-with-jest-and-chancejs-1a35edce0805
 [7]: https://hackernoon.com/u/vsbmeza
+[8]: https://docs.docker.com/engine/install/
+[9]: https://nodejs.org/en/download/

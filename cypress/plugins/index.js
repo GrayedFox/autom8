@@ -4,35 +4,68 @@
 // See: https://docs.cypress.io/guides/tooling/plugins-guide#Use-Cases
 const chance = require('chance').Chance()
 
-const teardown = require('../../database/tasks/teardown')
-const seed = require('../../database/tasks/seed')
+const {
+  checkMongoDbReady,
+  connect,
+  disconnect,
+  isHostAcceptingConnections,
+  generateFixtures,
+  getDocsTotal,
+  seed,
+  setup,
+  teardown,
+} = require('../../database/tasks/db')
 
+/* eslint-disable no-console */
 // eslint-disable-next-line no-unused-vars
-module.exports = (on, config) => {
-  on('before:run', () => {
+module.exports = async (on, config) => {
+  // common tasks executed before every suite run
+  on('before:run', async () => {
+    console.log('BEFORE:RUN HOOK')
+
     // this is either set manually or should already be present if Cypress retries a failed test
     if (!process.env.CYPRESS_CHANCE_SEED) {
-      process.env.CYPRESS_CHANCE_SEED = chance.hash();
+      process.env.CYPRESS_CHANCE_SEED = chance.hash()
     }
 
-    // eslint-disable-next-line no-console
     console.log(`CYPRESS_CHANCE_SEED: ${process.env.CYPRESS_CHANCE_SEED}`)
+
+    await setup()
+    const portAcceptingConnections = await isHostAcceptingConnections(15)
+
+    // Sometimes the mongo docker image is up but not accepting connections
+    // we fail the run if this is the case
+    if (portAcceptingConnections === false) {
+      console.log('Mongo host not accepting connections, stopping and removing docker images...')
+      await teardown()
+      throw new Error('Please retry the test suite')
+    }
+
+    // we attempt to connect to Mongo every M milliseconds a total of T times
+    await checkMongoDbReady(1000, 10)
+    await connect()
   })
 
-  on('after:run', () => {
-    // delete randomly generated seed if all tests passed?
+  // common tasks executed after every suite run
+  on('after:run', async () => {
+    console.log('AFTER:RUN HOOK')
+
+    await disconnect()
+    await teardown()
   })
 
+  // cypress tasks must return either null or a Promise
   on('task', {
-    'db:teardown': () => {
-      teardown()
+    'db:generateFixtures': async () => generateFixtures(),
+
+    'db:logTotal': async () => {
+      const result = await getDocsTotal()
+      console.log(`Total docs: ${result}`)
+      return null
     },
 
-    'db:seed': () => {
-      seed()
-    },
+    'db:seed': async (data) => seed(data),
 
-    // return the chance seed in use for this run
-    chanceSeed: () => process.env.CYPRESS_CHANCE_SEED
+    'chance:seed': () => process.env.CYPRESS_CHANCE_SEED
   })
 }

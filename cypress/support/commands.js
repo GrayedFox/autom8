@@ -26,7 +26,8 @@ Cypress.Commands.add('uploadPngImage', (imageName, selector) => {
 
   cy.fixture(imagePath).as('pngImage')
 
-  // cannot use an arrow function here since we need the calling function's scope for 'this'
+  // better to use a normal function here since we need the calling function's scope
+  // in order to reference 'this.pngImage'
   cy.get(selector).then(function callback(el) {
     // convert the image base64 string to a blob
     const blob = Cypress.Blob.base64StringToBlob(this.pngImage, 'image/png')
@@ -35,8 +36,9 @@ Cypress.Commands.add('uploadPngImage', (imageName, selector) => {
     const list = new DataTransfer()
 
     list.items.add(file)
-
+    // replace element's (presumaby empty) files property with our image
     el[0].files = list.files
+    // fire the change event on the fileUpload element and ensure it bubbles up the DOM
     el[0].dispatchEvent(new Event('change', { bubbles: true }))
   })
 })
