@@ -30,18 +30,21 @@ module.exports = async (on, config) => {
 
     console.log(`CYPRESS_CHANCE_SEED: ${process.env.CYPRESS_CHANCE_SEED}`)
 
-    await setup()
-    const portAcceptingConnections = await isHostAcceptingConnections(15)
+    // passing false here prevents the entire test suite from failing if
+    // the docker command fails, but it also swallows any error message
+    await setup(false)
+    // wait up to S seconds for Mongo to start accepting connections
+    const portAcceptingConnections = await isHostAcceptingConnections(10)
 
     // Sometimes the mongo docker image is up but not accepting connections
-    // we fail the run if this is the case
+    // NOTE: we fail the run if this is the case
     if (portAcceptingConnections === false) {
       console.log('Mongo host not accepting connections, stopping and removing docker images...')
       await teardown()
       throw new Error('Please retry the test suite')
     }
 
-    // we attempt to connect to Mongo every M milliseconds a total of T times
+    // we poll Mongo every M milliseconds T times in order to check if it is ready
     await checkMongoDbReady(1000, 10)
     await connect()
   })
