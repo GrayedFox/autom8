@@ -14,7 +14,7 @@ describe('Transactions', () => {
     // the Real World App still redirects the user to the login page if using loginByJSON
     // cy.loginByJSON()
 
-    cy.task('chanceSeed').then((seed) => {
+    cy.task('chance:seed').then((seed) => {
       chance = new Chance(seed)
     })
 
