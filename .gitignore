@@ -2,6 +2,9 @@
 cypress/screenshots/*
 cypress/videos/*
 
+# IDEs
+.vscode/
+
 # Logs
 *.log
 npm-debug.log*
