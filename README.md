@@ -1,6 +1,6 @@
 # autom8
 
-A template repo for web and backend automation using Cypress, Node, ChanceJS, plus some extras.
+A template repository for web and backend automation using Cypress, Node, and Docker (plus some extras).
 
 ## goal
 
@@ -54,9 +54,19 @@ principles and conservative assumptions about most modern web application stacks
 
 ## usage
 
+As this repository is a template repository you can easily use it as the basis for your own
+automation suite. By using this template as a foundation your repository can be marked as private,
+and it will have [a unique, seperate commit history][10], not to mention be owned and managed
+by you/your organisation. Live long and prosper!
+
+## tips
+
+- read the code comments! there's a lot of comments and logging, things that should help clarify
+  concepts and make the reasoning behind certain things explicit (including code smells...)
 - update the `baseURL` inside `cypress.json` to point to your local or hosted application
 - update the `apiURL` inside `cypress.json` to point to your API
-- update and add any endpoints to `cypress.env.json` (your VCS may want to ignore this file)
+- add urls to `cypress.env.json` that you may want to use outside of page objects (i.e. from
+  within custom commands) to use as command defaults
 
 ## troubleshooting
 
@@ -97,3 +107,4 @@ whatever custom image name you have chosen.
 [7]: https://hackernoon.com/u/vsbmeza
 [8]: https://docs.docker.com/engine/install/
 [9]: https://nodejs.org/en/download/
+[10]: https://docs.github.com/en/github/creating-cloning-and-archiving-repositories/creating-a-repository-on-github/creating-a-repository-from-a-template
