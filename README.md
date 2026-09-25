@@ -1,3 +1,6 @@
+> [!WARNING]
+> This repository has been archived and is now read-only.
+
 # autom8
 
 A template repository for web and backend automation using Cypress, Node, and Docker (plus some extras).
